@@ -4,7 +4,7 @@ title: java 集合类源码阅读
 ---
 ***
 
-![](javaCollectionFrame.png)
+![](java集合类框架图.png)
 ### ArrayList 与 LinkedList
 
 1.ArrayList
