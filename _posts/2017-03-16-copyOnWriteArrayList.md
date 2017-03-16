@@ -4,7 +4,7 @@ title: java 集合类源码阅读
 ---
 ***
 
-![https://github.com/nanhuirong/nanhuirong.github.io/blob/master/public/images/javaCollectionFrame.png](java集合类框架图.png)
+![](java集合类框架图.png)
 ### ArrayList 与 LinkedList
 
 1.ArrayList
@@ -187,6 +187,8 @@ Map用于保存<key, value>型数据, 在java中有4种常见的形式: HashTabl
         return newTab;
     }
 ```
+
+https://raw.githubusercontent.com/nanhuirong/nanhuirong.github.io/master/_posts/2017-03-16-copyOnWriteArrayList.md
 
 
 
