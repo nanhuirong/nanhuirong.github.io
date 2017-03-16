@@ -4,7 +4,7 @@ title: java 集合类源码阅读
 ---
 ***
 
-![GitHub](https://raw.githubusercontent.com/nanhuirong/nanhuirong.github.io/master/_posts/javaCollectionFrame.png)
+![](https://raw.githubusercontent.com/nanhuirong/nanhuirong.github.io/master/_posts/javaCollectionFrame.png)
 ### ArrayList 与 LinkedList
 
 1.ArrayList
