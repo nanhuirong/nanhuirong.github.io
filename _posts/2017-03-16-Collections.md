@@ -68,6 +68,8 @@ CopyOnWrite主要有两个缺点:
 + 内存占用问题:写入时内存存在两份数据, 可能会造成频繁的minor gc 和 full gc
 + 数据一致性问题:CopyOnWrite只能保证数据的最终一致性, 无法保证数据的实时一致性.如果要保证数据的时效性, 请不要使用该容器
 
+***
+
 ### HashTable HashMap TreeMap LinkedHashMap ConcurrentHashMap
 Map用于保存<key, value>型数据, 在java中有4种常见的形式: HashTable, HashMap, TreeMap, LinkedHashMap.
 
@@ -111,6 +113,45 @@ Map用于保存<key, value>型数据, 在java中有4种常见的形式: HashTabl
     取余数操作其实就是 (capacity - 1) & hash  等价于 hash % capacity
 ```
 + 扩容操作
+
+3.LinkedHashMap
+![](https://raw.githubusercontent.com/nanhuirong/nanhuirong.github.io/master/_posts/LinkedHashMap.png)
+
++ 在HashMap的基础上采用双向链保证元素的插入顺序
+
+4.TreeMap
++ 内部采用红黑树实现, 元素默认升序
++ 非线程安全, 可采用Collections.synchronizedMap()实现并发操作
+
+5.ConcurrentHashMap
++ 线程安全
++ 内部实现采用锁分段机制, 在桶上设置n把锁, 每把锁管理固定区域
+
+***
+### HashSet TreeSet
+1.HashSet
++ 非线程安全, 内部维护一个HashMap, 只使用key, 所有的value字段没有使用, 都指向同一个地址
+
+2.TreeSet
++ 非线程安全, 内部维护一个TreeMap, 只使用Key, 所有的value字段没有使用
+
+3.List与Set接口
++ List代表有序集合, 这里的顺序指插入顺序
++ Set代表无序集合
+
+***
+
+### Queue
+1.BlockingQueue(多线程容器)
++ LinkedBlockingQueue:
+
++ ArrayBlockingQueue
+
+2.TransferQueue
+3.ConcurrentLinkedQueue
+4.PriorityQueue
+5.SynchronizedQueue(并不是一个真正的队列, 维护一组线程)
+
 
 
 
