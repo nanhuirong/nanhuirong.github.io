@@ -89,19 +89,6 @@ title: 多线程总结
 1.缓存最近执行的因式分解的数值及其计算结果
 + 基于可变对象
 ```java
-import javax.annotation.concurrent.GuardedBy;
-import javax.annotation.concurrent.ThreadSafe;
-import javax.servlet.Servlet;
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-/**
- * Created by huirong on 17-3-15.
- * 实现计算缓存命中
- * 更新缓存
- */
 @ThreadSafe
 public class CachedFactorizer {
     @GuardedBy("this") private BigInteger lastNumber;
@@ -155,14 +142,6 @@ public class CachedFactorizer {
 ```
 + 基于不可变对象实现
 ```java
-import javax.annotation.concurrent.Immutable;
-import java.math.BigInteger;
-import java.util.Arrays;
-
-/**
- * Created by huirong on 17-3-15.
- */
-@Immutable
 public class OneValueCache {
     private final BigInteger lastNumber;
     private final BigInteger[] lastFactors;
@@ -180,13 +159,6 @@ public class OneValueCache {
         }
     }
 }
-
-import java.math.BigInteger;
-
-/**
- * Created by huirong on 17-3-15.
- * 通过不可变对象实现线程安全
- */
 public class VolatileCacheFactor {
     private volatile OneValueCache cache = new OneValueCache(null, null);
     public void service(BigInteger number){
@@ -214,19 +186,6 @@ public class Point {
         this.y = y;
     }
 }
-
-import com.huirong.java.concurrent.Point;
-
-import javax.annotation.concurrent.ThreadSafe;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-/**
- * Created by huirong on 17-3-15.
- * 委托模式
- */
 @ThreadSafe
 public class DelegatingVehicleTracker {
     private final ConcurrentHashMap<String, Point> locations;
