@@ -180,7 +180,6 @@ public class VolatileCacheFactor {
 @Immutable
 public class Point {
     public final int x, y;
-
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
@@ -190,26 +189,21 @@ public class Point {
 public class DelegatingVehicleTracker {
     private final ConcurrentHashMap<String, Point> locations;
     private final Map<String, Point> unmodifiableMap;
-
     public DelegatingVehicleTracker(ConcurrentHashMap<String, Point> locations) {
         this.locations = locations;
         //维护location的一个只读模式的快照, 会实时进行更新
         this.unmodifiableMap = Collections.unmodifiableMap(locations);
     }
-
     public Map<String, Point> getLocations(){
         return unmodifiableMap;
     }
-
     //返回一个静态的拷贝
     public Map<String, Point> getStaticLocations(){
         return Collections.unmodifiableMap(new HashMap<>(locations));
     }
-
     public Point getLocation(String id){
         return locations.get(id);
     }
-
     public void setLocation(String id, int x, int y){
         if (locations.replace(id, new Point(x, y)) == null){
             throw new IllegalArgumentException("id 不存在");
@@ -222,23 +216,18 @@ public class DelegatingVehicleTracker {
 @ThreadSafe
 public class SafePoint {
     @GuardedBy("this") private int x, y;
-
     private SafePoint(int[] a) {
         this(a[0], a[1]);
     }
-
     public SafePoint(SafePoint p) {
         this(p.get());
     }
-
     public SafePoint(int x, int y) {
         this.set(x, y);
     }
-
     public synchronized int[] get() {
         return new int[]{x, y};
     }
-
     public synchronized void set(int x, int y) {
         this.x = x;
         this.y = y;
@@ -248,20 +237,16 @@ public class SafePoint {
 public class PublishingVehicleTracker {
     private final Map<String, SafePoint> locations;
     private final Map<String, SafePoint> unmodifiableMap;
-
     public PublishingVehicleTracker(Map<String, SafePoint> locations) {
         this.locations = new ConcurrentHashMap<String, SafePoint>(locations);
         this.unmodifiableMap = Collections.unmodifiableMap(this.locations);
     }
-
     public Map<String, SafePoint> getLocations() {
         return unmodifiableMap;
     }
-
     public SafePoint getLocation(String id) {
         return locations.get(id);
     }
-
     public void setLocation(String id, int x, int y) {
         if (!locations.containsKey(id))
             throw new IllegalArgumentException("invalid vehicle name: " + id);
