@@ -174,6 +174,7 @@ public class VolatileCacheFactor {
     }
 }
 ```
+
 2.车辆跟踪
 + 不可变对象
 ```java
@@ -251,6 +252,146 @@ public class PublishingVehicleTracker {
         if (!locations.containsKey(id))
             throw new IllegalArgumentException("invalid vehicle name: " + id);
         locations.get(id).set(x, y);
+    }
+}
+```
+
+3.闭锁
+```java
+public class TestHarness {
+    public long timeTasks(int nThreads, final Runnable task)
+            throws InterruptedException {
+        final CountDownLatch startGate = new CountDownLatch(1);
+        final CountDownLatch endGate = new CountDownLatch(nThreads);
+
+        for (int i = 0; i < nThreads; i++) {
+            Thread t = new Thread() {
+                public void run() {
+                    try {
+                        startGate.await();
+                        try {
+                            task.run();
+                        } finally {
+                            endGate.countDown();
+                        }
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+            };
+            t.start();
+        }
+
+        long start = System.nanoTime();
+        startGate.countDown();
+        endGate.await();
+        long end = System.nanoTime();
+        return end - start;
+    }
+}
+```
+
+4.栅栏
+```java
+public class CellularAutomata {
+    private final Board mainBoard;
+    private final CyclicBarrier barrier;
+    private final Worker[] workers;
+
+    public CellularAutomata(Board mainBoard) {
+        this.mainBoard = mainBoard;
+        int count = Runtime.getRuntime().availableProcessors() / 2;
+        this.barrier = new CyclicBarrier(count, new Runnable() {
+            @Override
+            public void run() {
+                mainBoard.commitNewValues();
+            }
+        });
+        this.workers = new Worker[count];
+        for (int i = 0; i < count; i++){
+            workers[i] = new Worker(mainBoard.getSubBoard(count, i));
+        }
+    }
+    private class Worker implements Runnable{
+        private final Board board;
+        public Worker(Board board){
+            this.board = board;
+        }
+
+        @Override
+        public void run() {
+            while (!board.hasConverged()){
+                for (int x = 0; x < board.getMaxX(); x++){
+                    for (int y = 0; y < board.getMaxY(); y++){
+                        board.setNewValue(x, y, computeValue(x, y));
+                    }
+                }
+                try {
+                    barrier.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        private int computeValue(int x, int y){
+            return 0;
+        }
+    }
+    public void start(){
+        for (int i = 0; i < workers.length; i++){
+            new Thread(workers[i]).start();
+        }
+        mainBoard.waitForConvergence();
+    }
+    interface Board{
+        int getMaxX();
+        int getMaxY();
+        int getValue(int x, int y);
+        int setNewValue(int x, int y, int value);
+        void commitNewValues();
+        boolean hasConverged();
+        void waitForConvergence();
+        Board getSubBoard(int numPartitions, int index);
+    }
+}
+```
+
+5.并发缓存
+```java
+public class Memoizer <A, V> implements Computable<A, V> {
+    private final ConcurrentMap<A, Future<V>> cache
+            = new ConcurrentHashMap<A, Future<V>>();
+    private final Computable<A, V> c;
+
+    public Memoizer(Computable<A, V> c) {
+        this.c = c;
+    }
+
+    public V compute(final A arg) throws InterruptedException {
+        while (true) {
+            Future<V> f = cache.get(arg);
+            if (f == null) {
+                Callable<V> eval = new Callable<V>() {
+                    public V call() throws InterruptedException {
+                        return c.compute(arg);
+                    }
+                };
+                FutureTask<V> ft = new FutureTask<V>(eval);
+                f = cache.putIfAbsent(arg, ft);
+                if (f == null) {
+                    f = ft;
+                    ft.run();
+                }
+            }
+            try {
+                return f.get();
+            } catch (CancellationException e) {
+                cache.remove(arg, f);
+            } catch (ExecutionException e) {
+                throw LaunderThrowable.launderThrowable(e.getCause());
+            }
+        }
     }
 }
 ```

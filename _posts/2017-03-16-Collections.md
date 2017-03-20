@@ -126,6 +126,7 @@ Map用于保存<key, value>型数据, 在java中有4种常见的形式: HashTabl
 5.ConcurrentHashMap
 + 线程安全
 + 内部实现采用锁分段机制, 在桶上设置n把锁, 每把锁管理固定区域
++ 迭代器不会抛出ConcurrentModificationException异常
 
 ***
 ### HashSet TreeSet
@@ -134,6 +135,8 @@ Map用于保存<key, value>型数据, 在java中有4种常见的形式: HashTabl
 
 2.TreeSet
 + 非线程安全, 内部维护一个TreeMap, 只使用Key, 所有的value字段没有使用
++ ConcurrentSkipListMap 同步SortedMap的替代品
++ ConcurrentSkipListSet 同步SortedSet的替代品
 
 3.List与Set接口
 + List代表有序集合, 这里的顺序指插入顺序
@@ -144,15 +147,20 @@ Map用于保存<key, value>型数据, 在java中有4种常见的形式: HashTabl
 ### Queue
 1.BlockingQueue(多线程容器)
 + LinkedBlockingQueue:
-
 + ArrayBlockingQueue
++ PriorityBlockingQueue:按优先级排序的队列
++ SynchronousQueue: 维护一组线程,
 
 2.TransferQueue
 3.ConcurrentLinkedQueue
++ 传统的先进先出的队列
+
 4.PriorityQueue
-5.SynchronizedQueue(并不是一个真正的队列, 维护一组线程)
++ 非并发的优先队列
 
-
+5.双端队列, 工作密取, 在生产者-消费者模式中, 每个消费者有一个双端队列, 如果完成自己队列的工作可以从其他队尾取元素, 适合即使生产者又是消费者的问题
++ ArrayDeque
++ LinkedBlockingDeque
 
 
 
