@@ -4,7 +4,7 @@ title: Exception详解
 ---
 ***
 
-[Exception 继承关系](https://raw.githubusercontent.com/nanhuirong/nanhuirong.github.io/master/_posts/Exception.jpg)
+![Exception 继承](https://raw.githubusercontent.com/nanhuirong/nanhuirong.github.io/master/_posts/Exception.jpg)
 
 + 可查异常: 除了RuntimeException及其子类的其他Exception, java编译器一定会检查.
 + 不可查异常: RuntimeException 和 Error.<br>
