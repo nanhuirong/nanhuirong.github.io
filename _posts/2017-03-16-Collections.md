@@ -4,6 +4,12 @@ title: java 集合类源码阅读
 ---
 ***
 
+## Java基础类库
++ java.lang
++ java.util
++ java.util.concurrent
++ java.io
+
 ![](https://raw.githubusercontent.com/nanhuirong/nanhuirong.github.io/master/_posts/Collections.png)
 
 ### ArrayList 与 LinkedList
