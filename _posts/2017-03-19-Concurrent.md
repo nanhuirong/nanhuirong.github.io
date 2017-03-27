@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 多线程总结
+title: Java并发编程
 ---
 ### 并发编程问题思考
 + 内置锁的缺点: 引起混乱, 迫使JVM在对象大小和加锁性能之间进行权衡
@@ -19,8 +19,14 @@ title: 多线程总结
 >借助同步(Piggyback)
 
 ***
+java.util.concurrent中更高级别工具：<br>
+>Executor Framework<br>
+>并发集合<Concurrent Collection><br>
+>同步器（Synchronizer）使线程能够等待另一个线程的对象允许他们协调动作，CountDownLatch、Semaphore、CyclicBarrier、Exchanger<br>
 
-### 多线程编程基础概念
+***
+
+### 并发编程基础概念
 1.Java同步机制
 + synchronized: 隐式独占锁<br>
 >用在代码块或者方法上, 处理临界资源<br>
@@ -52,11 +58,12 @@ title: 多线程总结
 + Executors.newFixedThreadPool(): 创建一个固定长度的线程池 利用LinkedBlockingQueue 表示一个无界队列
 + Executors.newCachedThreadPool() 创建一个可缓存的线程, 动态扩张和缩小, 线程池的规模不受任何限制
 + Executors.newSingleThreadExecutor() 创建一个单线程的线程池利用LinkedBlockingQueue 表示一个无界队列
-+ Executors.newScheduledThreadPool()  创建一个固定长度的线程池, 而且以延时或者定时的方式执行
++ Executors.newScheduledThreadPool()  创建一个固定长度的线程池, 而且以延时或者定时的方式执行，替代java。util。Timer
 + 关闭线程池: ExecutorService<br>
 >shutDown()  平滑结束线程池 不再接受新任务, 并等待已提交任务的完成<br>
 >shutdownNow()   尝试取消所有的运行中的任务, 并不再执行已经提交的任务并将其返回<br>
 >缺点: 没有办法返回一个值, 抛出一个受检测的异常, 已提交但是未开始的任务可以取消, 已开始的任务只有当他们可以响应中断时才可以取消<br>
+>ThreadPoolExecutor支持更高程度的对线程池的控制<br>
 
 4.管理延时任务和周期任务(有缺陷)
 + 替代方案:<br>
