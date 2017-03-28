@@ -496,7 +496,7 @@ Java Native Interface（JNI）允许调用本地方法（用本地C或者C++编�
 + 努力使失败保持原子性
 + 不要忽略异常
 
-9.并发
+9.并发<br>
 [java并发编程](https://nanhuirong.github.io/Concurrent)
 + 同步访问共享的可变数据
 + 避免过度同步
