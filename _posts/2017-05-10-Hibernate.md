@@ -42,17 +42,58 @@ title: Hibernate
 + <br>
 ><br>
 
-3.hibernate核心组建
-+ Configuration类<br>
->它用来读取Hibernate的配置文件，并生成SessionFactory对象。Hibernate的配置文件有全局配置文件（hibernate.properties或hibernate.cfg.xml）和映射文件（*.hbm.xml）。<br>
-+ SessionFactory接口<br>
->这是Hibernate的关键对象，它是单个数据库映射关系经过编译后的内存镜像，它也是线程安全的。它是生成Session的工厂，本身要应用到ConnectionProvider，该对象可以在进程和集群的级别上，为那些事务之间可以重用的数据提供可选的二级缓存。<br>
-+ Session接口<br>
->它是应用程序和持久存储层之间交互操作的一个单线程对象。它也是Hibernate持久化操作的关键对象，所有的持久化对象必须在Session的管理下才能够进行持久化操作。此对象的生存周期很短，其隐藏了JDBC连接，也是Transaction 的工厂。Session对象有一个一级缓存，现实执行Flush之前，所有的持久化操作的数据都在缓存中Session对象处。<br>
-+ Transaction接口<br>
->代表一次原子操作，它具有数据库事务的概念。但它通过抽象，将应用程序从底层的具体的JDBC、JTA和CORBA事务中隔离开。在某些情况下，一个Session 之内可能包含多个Transaction对象。虽然事务操作是可选的，但是所有的持久化操作都应该在事务管理下进行，即使是只读操作。<br>
-+ ConnectionProvider<br>
->它是生成JDBC的连接的工厂，同时具备连接池的作用。他通过抽象将底层的DataSource和DriverManager隔离开。这个对象无需应用程序直接访问，仅在应用程序需要扩展时使用。<br>
-
-4.hibernate主键生成策略<br>
+3.hibernate主键生成策略<br>
 [主键生成策略](http://www.cnblogs.com/hoobey/p/5508992.html)<br>
+
+![](https://raw.githubusercontent.com/nanhuirong/nanhuirong.github.io/master/_posts/hibernate/hibernate核心类和接口.png)
+
+4.事务
++ 全局事务<br>
+>又称JTA，跨数据库。<br>
++ 本地事务
+>在同一数据库内。<br>
+
+5.Session
+>线程不安全，持久化接口，短生命周期对象，封装JDBC链接对象，作为一个事务工厂，
+维护domain对象的持久化内容。<br>
++ get 与load<br>
+>get：直接返回实体类，如果查不到数据返回null。先到缓存中查，如果不存在，立即去DB
+中查找。<br>
+>load：返回实体代理对象，如果数据不存在抛出异常。先到缓存（session缓存/二级缓存）
+中查找，如果找不到，当需要使用时去数据库查询（支持延时加载）<br>
+>确定对象一定存在，用load，否则用get。<br>
+
+6.hibernate缓存
++ 一级缓存<br>
+>又称session查询，存储SQL语句和domain对象。<br>
++ 二级缓存<br>
+>load查找到的对象会缓存在二级缓存中。<br>
+
+7.Query接口
+>其实Criteria接口类似于Query接口，官方推荐Query接口进行查询。<br>
+><br>
++ <br>
+><br>
++ <br>
+><br>
++ <br>
+><br>
+
+8.对象映射关系
++ one-one<br>
+><br>
++ one-many<br>
+><br>
++ many-many<br>
+>尽量通过一对多的关系进行避免<br>
+
+![](https://raw.githubusercontent.com/nanhuirong/nanhuirong.github.io/master/_posts/hibernate/hibernate对象状态.jpg)<br>
+
+9.Hibernate对象状态
++ 瞬时（自由）状态<br>
+>通过new创建的对象，特点是不和Session进行关联，在DB中不存在和对象关联的记录。<br>
++ 持久状态<br>
+>已经被保存到DB的实体对象，并且还处在hibernate的缓存管理中。持久对象总是与 Session 和 Transaction 相关联，在一个 Session 中，对持久对象的改变不会马上对数据库进行变更，而必须在 Transaction 终止，也就是执行 commit() 之后，才在数据库中真正运行 SQL 进行变更，持久对象的状态才会与数据库进行同步。在同步之前的持久对象称为脏 (dirty) 对象。<br>
++ 托管（游离）状态<br>
+>当一个持久化对象脱离hibernate的缓存管理（session关闭）时，处于游离状态（与自由状态的区别在于在DB中可能存在对应的记录）<br>
+
