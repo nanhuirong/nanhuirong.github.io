@@ -81,13 +81,19 @@ title: Hibernate
 
 8.对象映射关系
 + one-one<br>
-><br>
+>1）基于主键：<br>
+>2) 基于外键：<br>
 + one-many<br>
 ><br>
++ many-one<br>
+><br>
+>懒加载：查询一个对象，只默认返回对象的普通属性，当使用对象属性时，再次向DB发出查询。<br>
+> 1）关闭懒加载。<br>
+> 2）Hibernate.initialize()<br>
 + many-many<br>
->尽量通过一对多的关系进行避免<br>
+>尽量通过一对多的关系进行避免，Hibernate会将多对多转换成两个一对多的关系。<br>
 
-![](https://raw.githubusercontent.com/nanhuirong/nanhuirong.github.io/master/_posts/hibernate/hibernate对象状态.jpg)<br>
+![](https://raw.githubusercontent.com/nanhuirong/nanhuirong.github.io/master/_posts/hibernate/hibernate对象状态.gif)<br>
 
 9.Hibernate对象状态
 + 瞬时（自由）状态<br>
@@ -97,3 +103,5 @@ title: Hibernate
 + 托管（游离）状态<br>
 >当一个持久化对象脱离hibernate的缓存管理（session关闭）时，处于游离状态（与自由状态的区别在于在DB中可能存在对应的记录）<br>
 
+10.级联（cascade）
+>当进行一个操作时，另外的操作自动完成。常用的cascade:none,all,save-update,delete, lock,refresh,evict,replicate,persist,merge,delete-orphan(one-to-many)。<br>
