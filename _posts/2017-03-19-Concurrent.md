@@ -95,6 +95,7 @@ java.util.concurrent中更高级别工具：<br>
 ### 代码实践
 1.缓存最近执行的因式分解的数值及其计算结果
 + 基于可变对象
+
 ```java
 @ThreadSafe
 public class CachedFactorizer {
@@ -147,7 +148,9 @@ public class CachedFactorizer {
     }
 }
 ```
+
 + 基于不可变对象实现
+
 ```java
 public class OneValueCache {
     private final BigInteger lastNumber;
@@ -184,6 +187,7 @@ public class VolatileCacheFactor {
 
 2.车辆跟踪
 + 不可变对象
+
 ```java
 @Immutable
 public class Point {
@@ -219,7 +223,9 @@ public class DelegatingVehicleTracker {
     }
 }
 ```
+
 + 可变对象
+
 ```java
 @ThreadSafe
 public class SafePoint {
@@ -264,6 +270,7 @@ public class PublishingVehicleTracker {
 ```
 
 3.闭锁
+
 ```java
 public class TestHarness {
     public long timeTasks(int nThreads, final Runnable task)
@@ -298,6 +305,7 @@ public class TestHarness {
 ```
 
 4.栅栏
+
 ```java
 public class CellularAutomata {
     private final Board mainBoard;
@@ -365,6 +373,7 @@ public class CellularAutomata {
 ```
 
 5.并发缓存
+
 ```java
 public class Memoizer <A, V> implements Computable<A, V> {
     private final ConcurrentMap<A, Future<V>> cache
@@ -402,3 +411,4 @@ public class Memoizer <A, V> implements Computable<A, V> {
     }
 }
 ```
+
