@@ -69,6 +69,7 @@ private transient volatile Object[] array;
 copyOnWrite其实是一种读写分离的理论.
 CopyOnWriteArraySet与之原理类似, 都是线程安全的.
 可以基于此原理实现Map.
+
 4.总结
 CopyOnWrite主要有两个缺点:
 + 内存占用问题:写入时内存存在两份数据, 可能会造成频繁的minor gc 和 full gc
